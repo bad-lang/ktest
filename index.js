@@ -1,28 +1,22 @@
 const WebSocket = require('ws');
 const { encode, decode } = require("msgpack-lite");
-const MessageParser = require('./messageParser')
-const MessageBuilder = require('./messageBuilder')
+// const MessageParser = require('./messageParser')
+// const MessageBuilder = require('./messageBuilder')
 const validationToken = require('./validationToken');
 // const VersionManager = require('./VersionManager')
 const Token = new validationToken();
 const fetch = require('node-fetch');
 
-let num;
-
-async function getAhk () {
-  var source = await(await fetch('https://api.sys32.dev/v2/source')).text();
-  var ahk = parseInt(source.match(/\.exports=([\d\.]+)/)[1]);
-  let num2 = 0xff & (ahk + 0);
-  num = num2;
-}
-
-getAhk();
+var source, ahk, build, num, vars_set = (async () => {
+	source = await(await fetch('https://api.sys32.dev/v2/source')).text();
+	ahk = parseInt(source.match(/\.exports=([\d\.]+)/)[1]);
+	build = source.match(/\.exports='(\w+)'/)[1];
+	num = 0xff & (ahk + 0);
+})();
 
 const req = require('./req.js')
 async function genuuid(game){
-  var source = await(await fetch('https://api.sys32.dev/v2/source')).text();
-  var build = source.match(/\.exports='(\w+)'/)[1];
-    var token = await Token.token_argument(),
+	var token = await Token.token_argument(),
     mm_params = new URLSearchParams(Object.entries({
         hostname: 'krunker.io',
         region: 'us-sv',
@@ -120,8 +114,8 @@ class GameApi {
   }
 
   async send(id, ...data){    
-    if (!num) return;
-    
+	await vars_set;
+	
     var append = [0xf & (num >> 4), 0xf & num],
         encoded = encode([ id, ...data]),
         binary = new Uint8Array(encoded.length + 2);
@@ -157,4 +151,3 @@ class GameApi {
 }
 
 module.exports = GameApi;
-
