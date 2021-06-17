@@ -110,7 +110,6 @@ class GameApi {
         } else if(decoded[0] === 'load'){
           this.send('load', null)
         } else if(decoded[0] === 'ready'){
-          // this.send('a', 1, ['divinelemon', 'Joey12345', '6LdvBrQUAAAAAL6gtEpVNzii_3nQkbOyx912nvlm'], null)
           // this.send(['en', [1, 2482, [-1, -1], -1, -1, 2, 0, 1, 1, -1, -1, 1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1], 16, 18])
           let class_id = 1, spray_id = 0, challenge_mode = 0, skin_tone = 0, attachment = 0;
           // this.send('en', [class_id, spray_id, [-1,-1], -1, -1, 2, 0, challenge_mode, 1, -1, skin_tone, 1, attachment, -1, -1, 1, 0, -1, -1, -1, 0, -1], 16, 18);
